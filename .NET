@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Add Name</title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        body {
+            background-color: beige;
+            font-family: Verdana, Arial;
+            margin: 50px;
+        }
+
+        form {
+            padding: 10px;
+            border-style: solid;
+            width: 250px;
+        }
+    </style>
+</head>
+<body>
+
+    <form method="post" action="">
+        First Name:<br />
+        <input type="text" name="First Name" value="" /><br />
+       Second Name:<br />
+        <input type="text" name="Second Name" value="" /><br /><br />
+        <input type="submit" value="show full name " class="show full name" />
+    </form>
+    @{
+        if (IsPost)
+        {
+            string fname = Request["First Name"];
+            string sname = Request["Second Name"];
+            <p>
+           @fname  @sname
+            </p>
+        }
+    }
+</body>
+</html>
