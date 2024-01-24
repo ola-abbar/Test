@@ -1,0 +1,134 @@
+﻿@using WebMatrix.Data;
+@{
+
+    Validation.RequireField("name", " enter a name");
+    Validation.RequireField("mobile", "enter a mobile ");
+    Validation.RequireField("address", " entered a address");
+
+    var name = "";
+    var mobile = "";
+    var address = "";
+  
+    if (IsPost && Validation.IsValid()) {
+        if (IsPost && !Request["buttoninserte"].IsEmpty())
+        {
+
+            name = Request.Form["name"];
+            mobile = Request.Form["mobile"];
+            address = Request.Form["address"];
+
+
+            var db = Database.Open("userInformationDB");
+
+                var insertCommand = "INSERT INTO Person (Name, Mobile, Address) VALUES (@0, @1, @2)";
+                db.Execute(insertCommand, name, mobile, address);
+                Response.Redirect("DisplayInfo.cshtml");
+            
+          
+
+
+        }
+        if (IsPost && !Request["buttondelete"].IsEmpty())
+        {
+            name = Request.Form["name"];
+            var db = Database.Open("userInformationDB");
+                var deleteCommand = "DELETE FROM Person WHERE Name = @0";
+                db.Execute(deleteCommand, name);
+                Response.Redirect("DisplayInfo.cshtml");
+            
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #808080;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        fieldset {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: blue;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+            input[type="submit"]:hover {
+                background-color: #45a049;
+            }
+
+        p.error-message {
+            color: red;
+            font-weight: bold;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    @Html.ValidationSummary()
+    <form method="post">
+        <fieldset>
+            <legend>Insert/Delete Information</legend>
+            <p>
+                <label for="name">Name:</label>
+                <input type="text" name="name" value="@Request.Form["name"]" />
+                @Html.ValidationMessage("name")
+        
+                <label for="mobile">mobile:</label>
+                <input type="text" name="mobile" value="@Request.Form["mobile"]" />
+                @Html.ValidationMessage("mobile")
+            </p>
+            <p>
+                <label for="address">Address:</label>
+                <input type="text" name="address" value="@Request.Form["address"]" />
+                @Html.ValidationMessage("address")
+            </p>
+            <p>
+                <input type="submit" name="buttoninserte" value="Save" />
+                <input type="submit" name="buttondelete" value="Delete" />
+            </p>
+        </fieldset>
+    </form>
+</body>
+</html>
